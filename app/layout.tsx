@@ -2,14 +2,14 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Weight",
-  description: "A quiet, private place to track your weight.",
-  applicationName: "Weight",
+  title: "Weight-tracker",
+  description: "A private, focused place to track your weight.",
+  applicationName: "Weight-tracker",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
-    title: "Weight",
-    statusBarStyle: "default",
+    title: "Weight-tracker",
+    statusBarStyle: "black-translucent",
   },
   icons: {
     icon: "/icon.svg",
@@ -21,7 +21,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#f7f7f5",
+  themeColor: "#09090b",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

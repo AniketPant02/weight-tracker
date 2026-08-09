@@ -25,6 +25,9 @@ export function Tracker({ initialMeasurements, initialError, userId }: {
   const [signingOut, setSigningOut] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dailyWeights = useMemo(() => calculateDailyWeights(measurements), [measurements]);
+  const latest = dailyWeights.at(-1);
+  const previous = dailyWeights.at(-2);
+  const change = latest && previous ? latest.average - previous.average : null;
 
   async function addMeasurement(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -89,58 +92,69 @@ export function Tracker({ initialMeasurements, initialError, userId }: {
   }
 
   return (
-    <main className="mx-auto min-h-dvh max-w-[700px] px-5 pb-[max(4rem,env(safe-area-inset-bottom))] pt-[max(1.5rem,env(safe-area-inset-top))] sm:px-8 sm:pt-10">
-      <header className="flex items-center justify-between">
+    <main className="mx-auto min-h-dvh max-w-7xl px-4 pb-[max(3rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] sm:px-6 lg:px-8">
+      <header className="flex h-14 items-center justify-between border-b">
         <div className="flex items-center gap-2.5">
-          <span className="grid size-8 place-items-center rounded-[10px] bg-[var(--accent)] text-white" aria-hidden="true">
-            <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-              <path d="M5 9a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v7a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V9Z" />
-              <path d="M9 10a3 3 0 0 1 6 0m-3 0 1.7-2" strokeLinecap="round" />
-            </svg>
-          </span>
-          <span className="font-semibold tracking-[-0.02em]">Weight</span>
+          <span className="font-semibold tracking-[-0.02em]">weight-tracker</span>
         </div>
-        <button type="button" onClick={signOut} disabled={signingOut} className="min-h-11 rounded-lg px-2 text-sm text-[var(--muted)] transition hover:text-[var(--foreground)] disabled:opacity-50">
+        <button type="button" onClick={signOut} disabled={signingOut} className="min-h-9 rounded-md border bg-[var(--card)] px-3 text-sm font-medium text-[var(--muted)] transition-colors hover:bg-[var(--card-raised)] hover:text-[var(--foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] disabled:opacity-50">
           {signingOut ? "Signing out…" : "Sign out"}
         </button>
       </header>
 
-      <section className="mt-14 sm:mt-20">
-        <p className="text-sm font-medium text-[var(--muted)]">Add a measurement</p>
-        <form onSubmit={addMeasurement} className="mt-3 flex items-stretch gap-3">
-          <label className="relative min-w-0 flex-1">
-            <span className="sr-only">Weight in pounds</span>
-            <input
-              ref={inputRef}
-              name="weight"
-              type="number"
-              inputMode="decimal"
-              min="50"
-              max="1000"
-              step="0.1"
-              enterKeyHint="done"
-              placeholder="183.4"
-              required
-              className="h-16 w-full rounded-2xl border border-[var(--line)] bg-white py-2 pl-5 pr-12 text-[1.65rem] font-semibold tracking-[-0.035em] outline-none transition placeholder:font-normal placeholder:text-black/20 focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--accent-soft)]"
-            />
-            <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-[var(--muted)]">lb</span>
-          </label>
-          <button type="submit" disabled={submitting} className="h-16 shrink-0 rounded-2xl bg-[var(--foreground)] px-5 font-semibold text-white shadow-[0_6px_18px_rgba(20,24,20,0.12)] transition hover:bg-black active:scale-[0.98] disabled:cursor-wait disabled:opacity-60 sm:px-7">
-            {submitting ? "Saving…" : "Save"}
-          </button>
-        </form>
-        <div className="h-8 pt-2" aria-live="polite">
-          {notice && (
-            <p className={`fade-in text-sm ${notice.kind === "error" ? "text-red-700" : "text-[var(--accent)]"}`}>
-              {notice.kind === "success" && <span aria-hidden="true">✓ </span>}
-              {notice.text}
-            </p>
-          )}
+      <div className="py-8 sm:py-10">
+        <div>
+          <p className="text-sm font-medium text-[var(--muted)]">Overview</p>
+          <h1 className="mt-1 text-2xl font-semibold tracking-[-0.035em] sm:text-3xl">Your progress</h1>
         </div>
-      </section>
 
-      <WeightChart data={dailyWeights} />
-      <WeightHistory measurements={measurements} onDelete={deleteMeasurement} />
+        <section className="mt-6 grid gap-3 sm:grid-cols-3" aria-label="Weight summary">
+          <div className="rounded-xl border bg-[var(--card)] p-5">
+            <p className="text-sm text-[var(--muted)]">Current average</p>
+            <p className="mt-2 text-2xl font-semibold tracking-[-0.04em]">{latest ? latest.average.toFixed(1) : "—"} <span className="text-sm font-normal text-[var(--muted)]">lb</span></p>
+          </div>
+          <div className="rounded-xl border bg-[var(--card)] p-5">
+            <p className="text-sm text-[var(--muted)]">Daily change</p>
+            <p className={`mt-2 text-2xl font-semibold tracking-[-0.04em] ${change !== null && change < 0 ? "text-[var(--primary)]" : ""}`}>{change === null ? "—" : `${change > 0 ? "+" : ""}${change.toFixed(1)}`} <span className="text-sm font-normal text-[var(--muted)]">lb</span></p>
+          </div>
+          <div className="rounded-xl border bg-[var(--card)] p-5">
+            <p className="text-sm text-[var(--muted)]">Measurements</p>
+            <p className="mt-2 text-2xl font-semibold tracking-[-0.04em]">{measurements.length}</p>
+          </div>
+        </section>
+
+        <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+          <div className="min-w-0 space-y-6">
+            <WeightChart data={dailyWeights} />
+            <WeightHistory measurements={measurements} onDelete={deleteMeasurement} />
+          </div>
+
+          <section className="rounded-xl border bg-[var(--card)] p-5 lg:sticky lg:top-6" aria-labelledby="add-heading">
+            <div className="flex items-center gap-3">
+              <span className="grid size-9 place-items-center rounded-md bg-[var(--primary)] text-[var(--primary-foreground)]" aria-hidden="true">
+                <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14" strokeLinecap="round" /></svg>
+              </span>
+              <div>
+                <h2 id="add-heading" className="font-semibold">Add measurement</h2>
+                <p className="text-sm text-[var(--muted)]">Log your current weight</p>
+              </div>
+            </div>
+            <form onSubmit={addMeasurement} className="mt-6">
+              <label className="text-sm font-medium" htmlFor="weight">Weight</label>
+              <div className="relative mt-2">
+                <input ref={inputRef} id="weight" name="weight" type="number" inputMode="decimal" min="50" max="1000" step="0.1" enterKeyHint="done" placeholder="183.4" required className="h-11 w-full rounded-md border bg-[var(--background)] px-3 pr-11 text-sm outline-none transition placeholder:text-[var(--muted-foreground)] focus:border-[var(--ring)] focus:ring-2 focus:ring-[color:rgba(190,242,100,0.16)]" />
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[var(--muted)]">lb</span>
+              </div>
+              <button type="submit" disabled={submitting} className="mt-3 h-10 w-full rounded-md bg-[var(--primary)] px-4 text-sm font-semibold text-[var(--primary-foreground)] transition-colors hover:bg-[#c8f26e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--card)] active:translate-y-px disabled:cursor-wait disabled:opacity-60">
+                {submitting ? "Saving…" : "Save measurement"}
+              </button>
+            </form>
+            <div className="min-h-8 pt-3" aria-live="polite">
+              {notice && <p className={`fade-in text-sm ${notice.kind === "error" ? "text-[var(--destructive)]" : "text-[var(--primary)]"}`}>{notice.kind === "success" && <span aria-hidden="true">✓ </span>}{notice.text}</p>}
+            </div>
+          </section>
+        </div>
+      </div>
     </main>
   );
 }

@@ -10,11 +10,11 @@ export default async function HomePage() {
   if (!getSupabaseEnv()) {
     return (
       <main className="mx-auto flex min-h-dvh max-w-lg items-center px-6 py-16">
-        <section className="w-full rounded-3xl border border-[var(--line)] bg-white p-7 shadow-[0_14px_50px_rgba(20,25,20,0.06)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">Setup needed</p>
+        <section className="w-full rounded-xl border bg-[var(--card)] p-7">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--primary)]">Setup needed</p>
           <h1 className="mt-3 text-2xl font-semibold tracking-[-0.03em]">Connect Supabase</h1>
           <p className="mt-3 leading-7 text-[var(--muted)]">
-            Copy <code className="rounded bg-black/5 px-1.5 py-0.5 text-sm">.env.example</code> to <code className="rounded bg-black/5 px-1.5 py-0.5 text-sm">.env.local</code>, add your project URL and publishable key, then restart the app.
+            Copy <code className="rounded bg-white/5 px-1.5 py-0.5 text-sm">.env.example</code> to <code className="rounded bg-white/5 px-1.5 py-0.5 text-sm">.env.local</code>, add your project URL and publishable key, then restart the app.
           </p>
         </section>
       </main>

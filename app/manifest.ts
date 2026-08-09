@@ -2,13 +2,13 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Weight",
-    short_name: "Weight",
-    description: "Private personal weight tracker",
+    name: "Weightlog",
+    short_name: "Weightlog",
+    description: "A private, focused place to track your weight.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f7f7f5",
-    theme_color: "#f7f7f5",
+    background_color: "#09090b",
+    theme_color: "#09090b",
     icons: [
       { src: "/icon.svg", sizes: "any", type: "image/svg+xml" },
       { src: "/app-icon-192.png", sizes: "192x192", type: "image/png" },

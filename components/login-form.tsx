@@ -25,18 +25,15 @@ export function LoginForm({ initialError }: { initialError?: string | null }) {
   }
 
   return (
-    <section>
-      <h1 className="text-[2rem] font-semibold tracking-[-0.045em]">
-        Welcome back
+    <section className="rounded-xl border bg-[var(--card)] p-6 sm:p-8">
+      <h1 className="text-2xl font-semibold tracking-[-0.04em]">
+        Log in to your account
       </h1>
-      <p className="mt-2 text-[var(--muted)]">
-        Your private weight history, on every device.
-      </p>
 
       {error && (
         <p
           role="alert"
-          className="mt-7 rounded-xl bg-red-50 px-4 py-3 text-sm leading-5 text-red-700"
+          className="mt-6 rounded-md border border-red-400/20 bg-[var(--destructive-soft)] px-4 py-3 text-sm leading-5 text-[var(--destructive)]"
         >
           {error}
         </p>
@@ -46,7 +43,7 @@ export function LoginForm({ initialError }: { initialError?: string | null }) {
         type="button"
         onClick={signInWithGoogle}
         disabled={pending}
-        className="mt-8 flex h-13 w-full items-center justify-center gap-3 rounded-xl border border-[var(--line)] bg-white px-4 font-semibold text-[var(--foreground)] shadow-[0_3px_12px_rgba(20,25,20,0.04)] transition hover:border-black/25 hover:bg-black/[0.015] active:scale-[0.99] disabled:cursor-wait disabled:opacity-60"
+        className="mt-7 flex h-11 w-full items-center justify-center gap-3 rounded-md bg-[var(--primary)] px-4 text-sm font-semibold text-[var(--primary-foreground)] transition-colors hover:bg-[#c8f26e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--card)] active:translate-y-px disabled:cursor-wait disabled:opacity-60"
       >
         <svg viewBox="0 0 24 24" className="size-5" aria-hidden="true">
           <path fill="#4285F4" d="M21.6 12.23c0-.71-.06-1.4-.18-2.07H12v3.91h5.38a4.6 4.6 0 0 1-2 3.02v2.54h3.24c1.9-1.75 2.98-4.33 2.98-7.4Z" />
@@ -56,10 +53,6 @@ export function LoginForm({ initialError }: { initialError?: string | null }) {
         </svg>
         {pending ? "Opening Google…" : "Continue with Google"}
       </button>
-
-      <p className="mt-5 text-center text-xs leading-5 text-[var(--muted)]">
-        Measurements are stored privately in Postgres and protected by your account.
-      </p>
     </section>
   );
 }

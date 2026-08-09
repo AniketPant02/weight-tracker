@@ -31,7 +31,7 @@ function ChartTooltip({ active, payload }: {
   if (!active || !payload?.[0]) return null;
   const point = payload[0].payload;
   return (
-    <div className="rounded-xl border border-[var(--line)] bg-white px-3.5 py-3 shadow-lg">
+    <div className="rounded-lg border bg-[var(--card-raised)] px-3.5 py-3 shadow-xl">
       <p className="text-xs font-medium text-[var(--muted)]">{formatCalendarDate(point.date, { month: "short", day: "numeric" })}</p>
       <p className="mt-1 text-sm font-semibold">Daily average: {point.average.toFixed(1)} lb</p>
       <p className="mt-0.5 text-xs text-[var(--muted)]">{point.measurementCount} {point.measurementCount === 1 ? "measurement" : "measurements"}</p>
@@ -55,13 +55,13 @@ export function WeightChart({ data }: { data: DailyWeight[] }) {
     : [0, 1];
 
   return (
-    <section className="mt-11 border-t border-[var(--line)] pt-9 sm:mt-14 sm:pt-12" aria-labelledby="trend-heading">
-      <div className="flex items-end justify-between gap-4">
+    <section className="rounded-xl border bg-[var(--card)] p-5 sm:p-6" aria-labelledby="trend-heading">
+      <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
         <div>
-          <h2 id="trend-heading" className="text-sm font-medium text-[var(--muted)]">Daily trend</h2>
+          <h2 id="trend-heading" className="font-semibold">Weight trend</h2>
           {latest ? (
             <div className="mt-2">
-              <p className="text-[2.25rem] font-semibold leading-none tracking-[-0.055em]">{latest.average.toFixed(1)} <span className="text-base font-medium tracking-normal text-[var(--muted)]">lb</span></p>
+              <p className="text-[2rem] font-semibold leading-none tracking-[-0.055em]">{latest.average.toFixed(1)} <span className="text-sm font-medium tracking-normal text-[var(--muted)]">lb</span></p>
               <p className="mt-2 text-sm text-[var(--muted)]">
                 {difference === null ? "Latest daily average" : `${difference > 0 ? "+" : ""}${difference.toFixed(1)} lb from previous day`}
               </p>
@@ -70,29 +70,29 @@ export function WeightChart({ data }: { data: DailyWeight[] }) {
             <p className="mt-2 text-2xl font-semibold tracking-[-0.04em]">No data yet</p>
           )}
         </div>
-        <div className="flex rounded-xl bg-black/[0.045] p-1" aria-label="Chart time range">
+        <div className="flex self-start rounded-lg border bg-[var(--background)] p-1" aria-label="Chart time range">
           {ranges.map((item) => (
-            <button key={item} type="button" onClick={() => setRange(item)} aria-pressed={range === item} className={`min-h-9 min-w-10 rounded-lg px-2 text-xs font-semibold transition ${range === item ? "bg-white text-[var(--foreground)] shadow-sm" : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}>
+            <button key={item} type="button" onClick={() => setRange(item)} aria-pressed={range === item} className={`min-h-8 min-w-10 rounded-md px-2 text-xs font-medium transition-colors ${range === item ? "bg-[var(--card-raised)] text-[var(--foreground)]" : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}>
               {item}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="mt-7 h-[260px] w-full sm:h-[300px]">
+      <div className="mt-7 h-[240px] w-full sm:h-[300px]">
         {filtered.length ? (
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={filtered} margin={{ top: 10, right: 8, left: -20, bottom: 0 }}>
-              <CartesianGrid vertical={false} stroke="#e5e5e0" strokeDasharray="3 5" />
-              <XAxis dataKey="date" axisLine={false} tickLine={false} minTickGap={28} tickMargin={12} tick={{ fill: "#777a74", fontSize: 11 }} tickFormatter={(value: string) => formatCalendarDate(value, { month: "short", day: "numeric" })} />
-              <YAxis domain={domain} axisLine={false} tickLine={false} width={52} tickMargin={8} tick={{ fill: "#777a74", fontSize: 11 }} tickFormatter={(value: number) => `${value}`} />
-              <Tooltip content={<ChartTooltip />} cursor={{ stroke: "#a9aaa5", strokeDasharray: "3 3" }} />
-              <Line type="monotone" dataKey="average" stroke="#355f4b" strokeWidth={2.5} dot={{ r: 3.5, fill: "#f7f7f5", stroke: "#355f4b", strokeWidth: 2 }} activeDot={{ r: 5, fill: "#355f4b", stroke: "white", strokeWidth: 2 }} isAnimationActive={false} />
+              <CartesianGrid vertical={false} stroke="#27272a" strokeDasharray="3 5" />
+              <XAxis dataKey="date" axisLine={false} tickLine={false} minTickGap={28} tickMargin={12} tick={{ fill: "#71717a", fontSize: 11 }} tickFormatter={(value: string) => formatCalendarDate(value, { month: "short", day: "numeric" })} />
+              <YAxis domain={domain} axisLine={false} tickLine={false} width={52} tickMargin={8} tick={{ fill: "#71717a", fontSize: 11 }} tickFormatter={(value: number) => `${value}`} />
+              <Tooltip content={<ChartTooltip />} cursor={{ stroke: "#71717a", strokeDasharray: "3 3" }} />
+              <Line type="monotone" dataKey="average" stroke="#bef264" strokeWidth={2.5} dot={{ r: 3.5, fill: "#111113", stroke: "#bef264", strokeWidth: 2 }} activeDot={{ r: 5, fill: "#bef264", stroke: "#09090b", strokeWidth: 2 }} isAnimationActive={false} />
             </LineChart>
           </ResponsiveContainer>
         ) : (
-          <div className="flex h-full flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--line)] px-8 text-center">
-            <span className="grid size-11 place-items-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]" aria-hidden="true">
+          <div className="flex h-full flex-col items-center justify-center rounded-lg border border-dashed px-8 text-center">
+            <span className="grid size-10 place-items-center rounded-md bg-[color:rgba(190,242,100,0.1)] text-[var(--primary)]" aria-hidden="true">
               <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="m4 16 5-5 4 3 7-8" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </span>
             <p className="mt-4 font-medium">{data.length ? "No measurements in this range" : "Your trend will appear here"}</p>
