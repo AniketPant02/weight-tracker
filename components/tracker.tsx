@@ -108,28 +108,28 @@ export function Tracker({ initialMeasurements, initialError, userId }: {
           <h1 className="mt-1 text-2xl font-semibold tracking-[-0.035em] sm:text-3xl">Your progress</h1>
         </div>
 
-        <section className="mt-6 grid gap-3 sm:grid-cols-3" aria-label="Weight summary">
-          <div className="rounded-xl border bg-[var(--card)] p-5">
-            <p className="text-sm text-[var(--muted)]">Current average</p>
-            <p className="mt-2 text-2xl font-semibold tracking-[-0.04em]">{latest ? latest.average.toFixed(1) : "—"} <span className="text-sm font-normal text-[var(--muted)]">lb</span></p>
-          </div>
-          <div className="rounded-xl border bg-[var(--card)] p-5">
-            <p className="text-sm text-[var(--muted)]">Daily change</p>
-            <p className={`mt-2 text-2xl font-semibold tracking-[-0.04em] ${change !== null && change < 0 ? "text-[var(--primary)]" : ""}`}>{change === null ? "—" : `${change > 0 ? "+" : ""}${change.toFixed(1)}`} <span className="text-sm font-normal text-[var(--muted)]">lb</span></p>
-          </div>
-          <div className="rounded-xl border bg-[var(--card)] p-5">
-            <p className="text-sm text-[var(--muted)]">Measurements</p>
-            <p className="mt-2 text-2xl font-semibold tracking-[-0.04em]">{measurements.length}</p>
-          </div>
-        </section>
-
         <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
-          <div className="min-w-0 space-y-6">
+          <section className="order-2 grid gap-3 sm:grid-cols-3 lg:order-1 lg:col-start-1 lg:row-start-1" aria-label="Weight summary">
+            <div className="rounded-xl border bg-[var(--card)] p-5">
+              <p className="text-sm text-[var(--muted)]">Current average</p>
+              <p className="mt-2 text-2xl font-semibold tracking-[-0.04em]">{latest ? latest.average.toFixed(1) : "—"} <span className="text-sm font-normal text-[var(--muted)]">lb</span></p>
+            </div>
+            <div className="rounded-xl border bg-[var(--card)] p-5">
+              <p className="text-sm text-[var(--muted)]">Daily change</p>
+              <p className={`mt-2 text-2xl font-semibold tracking-[-0.04em] ${change !== null && change < 0 ? "text-[var(--primary)]" : ""}`}>{change === null ? "—" : `${change > 0 ? "+" : ""}${change.toFixed(1)}`} <span className="text-sm font-normal text-[var(--muted)]">lb</span></p>
+            </div>
+            <div className="rounded-xl border bg-[var(--card)] p-5">
+              <p className="text-sm text-[var(--muted)]">Measurements</p>
+              <p className="mt-2 text-2xl font-semibold tracking-[-0.04em]">{measurements.length}</p>
+            </div>
+          </section>
+
+          <div className="order-3 min-w-0 space-y-6 lg:order-2 lg:col-start-1 lg:row-start-2">
             <WeightChart data={dailyWeights} />
             <WeightHistory measurements={measurements} onDelete={deleteMeasurement} />
           </div>
 
-          <section className="rounded-xl border bg-[var(--card)] p-5 lg:sticky lg:top-6" aria-labelledby="add-heading">
+          <section className="order-1 rounded-xl border bg-[var(--card)] p-5 lg:order-3 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:sticky lg:top-6" aria-labelledby="add-heading">
             <div className="flex items-center gap-3">
               <span className="grid size-9 place-items-center rounded-md bg-[var(--primary)] text-[var(--primary-foreground)]" aria-hidden="true">
                 <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14" strokeLinecap="round" /></svg>
